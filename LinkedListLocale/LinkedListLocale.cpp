@@ -118,6 +118,7 @@ struct list {
         last = slow;
         last->next = nullptr;
     }
+    //Сливание двух списков в одно множество
     list set_list(list& L2) {
         if (is_empty() && L2.is_empty()) 
             return list();
@@ -144,20 +145,28 @@ struct list {
         return L;
     }
     void remove_all(float _val) {
-        if (first->val == _val)
-            remove_first();
+        Node* iter = first;
+        int count = 0;
+        while (iter != nullptr) {
+            if (iter->val == _val)
+                count++;
+            iter = iter->next;
+        }
+
+        for (unsigned i = 0; i < count; i++)
+            remove(_val);
+    }
+    void remove_prev_negative() {
+        if (first == last)
+            return;
 
         Node* slow = first;
         Node* fast = first->next;
         while (fast != nullptr) {
-            if (fast->val == _val) {
-                remove(_val);
-                fast = slow->next;
-            }
-            else {
-                slow = slow->next;
-                fast = fast->next;
-            }
+            //if (fast)
+
+            slow = slow->next;
+            fast = fast->next;
         }
     }
 private:
@@ -178,16 +187,11 @@ private:
 
         list res;
         Node* fast = first;
-
-        cout << endl;
-
         while (fast != nullptr) {
             res.push_back(fast->val);
             remove_all(fast->val);
             fast = first;
         }
-        cout << endl;
-
         *this = res;
     }
 };
@@ -196,27 +200,12 @@ private:
 int main()
 {
     list l1;
-    list l2;
 
     l1.push_back(10);
     l1.push_back(20);
     l1.push_back(30);
 
-
-    l2.push_back(30);
-    l2.push_back(40);
-    l2.push_back(50);
-
     l1.print();
-    l2.print();
-
-    list L = l1.set_list(l2);
-
-    l1.remove_all(30);
-
-    l1.print();
-    l2.print();
-    L.print();
 
     return 0;
 }
